@@ -27,6 +27,12 @@
     @media screen and (min-width: 768px) {
         border-radius: var(--radius-xl) !important;
     }
+    &.justify-content-start {
+        @media screen and (min-width: 992px) and (min-height: 1150px) {
+            justify-content: center !important;
+        }
+    }
+
     .modal-dialog {
         min-height: unset;
         margin: 1rem 0 0 0 !important;
@@ -37,6 +43,14 @@
         @media screen and (min-width: 992px) and (min-height: 750px) {
             max-width: 800px;
             margin: 0 !important;
+        }
+        &.mt-3 {
+            @media screen and (min-width: 992px) and (min-height: 750px) {
+                margin: 1rem 0 0 0 !important;
+            }
+            @media screen and (min-width: 992px) and (min-height: 1150) {
+                margin: 0 0 0 0 !important;
+            }
         }
     }
 }
@@ -746,7 +760,6 @@
 
 // Country code dropdown specific styles
 .order-custom-dropdown[data-dropdown="countryCode"] {
-
     .order-dropdown-trigger {
         padding: var(--spacing-md) var(--spacing-md);
         font-size: var(--font-sm);
@@ -774,7 +787,4 @@
             border-right: none;
         }
     }
-
-   
 }
-

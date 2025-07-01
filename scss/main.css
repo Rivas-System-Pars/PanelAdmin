@@ -10,7 +10,7 @@ html {
 }
 
 body {
-  font-family: "dana", sans-serif;
+  font-family: "yekan bakh", sans-serif;
   overflow-x: hidden;
 }
 
@@ -5468,6 +5468,11 @@ header .crm_header .mobile_menu_closing:hover i {
     border-radius: var(--radius-xl) !important;
   }
 }
+@media screen and (min-width: 992px) and (min-height: 1150px) {
+  .create_order_modal.show.justify-content-start {
+    justify-content: center !important;
+  }
+}
 .create_order_modal.show .modal-dialog {
   min-height: unset;
   margin: 1rem 0 0 0 !important;
@@ -5482,6 +5487,16 @@ header .crm_header .mobile_menu_closing:hover i {
   .create_order_modal.show .modal-dialog {
     max-width: 800px;
     margin: 0 !important;
+  }
+}
+@media screen and (min-width: 992px) and (min-height: 750px) {
+  .create_order_modal.show .modal-dialog.mt-3 {
+    margin: 1rem 0 0 0 !important;
+  }
+}
+@media screen and (min-width: 992px) and (min-height: 1150) {
+  .create_order_modal.show .modal-dialog.mt-3 {
+    margin: 0 0 0 0 !important;
   }
 }
 

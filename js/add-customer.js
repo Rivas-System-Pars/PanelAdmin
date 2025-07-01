@@ -267,10 +267,3 @@ function resetForm() {
     $("#addAddressToggle").prop("checked", false).trigger("change");
     $("#billingSameToggle").prop("checked", true);
 }
-
-// Add shake animation
-// $("<style>")
-//     .text(
-//         "@keyframes shake { 0%, 100% { transform: translate(50%, -50%); } 25% { transform: translate(50%, -50%) translateX(-5px); } 75% { transform: translate(50%, -50%) translateX(5px); } }"
-//     )
-//     .appendTo("head");

@@ -99,10 +99,17 @@ class OrderCustomDropdown {
     disable() {
         this.dropdown.addClass("order-disabled");
         this.close();
+        this.reset();
+        $(".create_order_modal").addClass("justify-content-start");
+        $(".create_order_modal-dialog").addClass("mt-3");
     }
 
     enable() {
         this.dropdown.removeClass("order-disabled");
+        setTimeout(() => {
+            $(".create_order_modal").removeClass("justify-content-start");
+            $(".create_order_modal-dialog").removeClass("mt-3");
+        }, 350);
     }
 
     reset() {
@@ -355,7 +362,7 @@ $("#createOrderBtn").on("click", function () {
         orderDate: $("#orderDate").val(),
         orderTime: $("#orderTime").val(),
         orderNote: $("#orderNote").val(),
-        newCustomer: $("#newCustomerToggle").is(":checked"),
+        newCustomer: $("#newCustomerToggle").is(""),
         // New customer fields
         customerName: $("#customerName").val(),
         customerEmail: $("#customerEmail").val(),
