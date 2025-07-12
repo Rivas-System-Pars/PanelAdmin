@@ -100,14 +100,177 @@ $font-weights: (
     "semibold": 600,
     "bold": 700,
 );
-
+ 
 // Mixin for typography
 @mixin typography($size, $weight) {
     font-size: map-get($font-sizes, $size);
     font-weight: map-get($font-weights, $weight);
 }
+@mixin typographyImp($type, $weight, $important: false) {
+    $imp: if($important, "!important", "");
+    font-size: map-get($font-sizes, $type) #{$imp};
+    font-weight: map-get($font-weights, $weight) #{$imp};
+}
 
-// Usage example
-// h1 {
-//     @include typography("h1", "bold");
-// }
+.label {
+    &3 {
+        &-light {
+            @include typographyImp("label3", "normal", true);
+        }
+        &-normal {
+            @include typographyImp("label3", "medium", true);
+        }
+        &-semibold {
+            @include typographyImp("label3", "semibold", ture);
+        }
+        &-bold {
+            @include typographyImp("label3", "bold", true);
+        }
+    }
+    &2 {
+        &-light {
+            @include typographyImp("label2", "normal", true);
+        }
+        &-normal {
+            @include typographyImp("label2", "medium", true);
+        }
+        &-semibold {
+            @include typographyImp("label2", "semibold", ture);
+        }
+        &-bold {
+            @include typographyImp("label2", "bold", true);
+        }
+    }
+    &1 {
+        &-light {
+            @include typographyImp("label1", "normal", true);
+        }
+        &-normal {
+            @include typographyImp("label1", "medium", true);
+        }
+        &-semibold {
+            @include typographyImp("label1", "semibold", ture);
+        }
+        &-bold {
+            @include typographyImp("label1", "bold", true);
+        }
+    }
+}
+.paragraph {
+    &2 {
+        &-light {
+            @include typographyImp("paragraph2", "normal", true);
+        }
+        &-normal {
+            @include typographyImp("paragraph2", "medium", true);
+        }
+        &-semibold {
+            @include typographyImp("paragraph2", "semibold", ture);
+        }
+        &-bold {
+            @include typographyImp("paragraph2", "bold", true);
+        }
+    }
+    &1 {
+        &-light {
+            @include typographyImp("paragraph1", "normal", true);
+        }
+        &-normal {
+            @include typographyImp("paragraph1", "medium", true);
+        }
+        &-semibold {
+            @include typographyImp("paragraph1", "semibold", ture);
+        }
+        &-bold {
+            @include typographyImp("paragraph1", "bold", true);
+        }
+    }
+}
+.sub-heading {
+    &3 {
+        &-light {
+            @include typographyImp("sub-heading3", "normal", true);
+        }
+        &-normal {
+            @include typographyImp("sub-heading3", "medium", true);
+        }
+        &-semibold {
+            @include typographyImp("sub-heading3", "semibold", ture);
+        }
+        &-bold {
+            @include typographyImp("sub-heading3", "bold", true);
+        }
+    }
+    &2 {
+        &-light {
+            @include typographyImp("sub-heading2", "normal", true);
+        }
+        &-normal {
+            @include typographyImp("sub-heading2", "medium", true);
+        }
+        &-semibold {
+            @include typographyImp("sub-heading2", "semibold", ture);
+        }
+        &-bold {
+            @include typographyImp("sub-heading2", "bold", true);
+        }
+    }
+    &1 {
+        &-light {
+            @include typographyImp("sub-heading1", "normal", true);
+        }
+        &-normal {
+            @include typographyImp("sub-heading1", "medium", true);
+        }
+        &-semibold {
+            @include typographyImp("sub-heading1", "semibold", ture);
+        }
+        &-bold {
+            @include typographyImp("sub-heading1", "bold", true);
+        }
+    }
+}
+.h {
+    &3 {
+        &-light {
+            @include typographyImp("h3", "normal", true);
+        }
+        &-normal {
+            @include typographyImp("h3", "medium", true);
+        }
+        &-semibold {
+            @include typographyImp("h3", "semibold", ture);
+        }
+        &-bold {
+            @include typographyImp("h3", "bold", true);
+        }
+    }
+    &2 {
+        &-light {
+            @include typographyImp("h2", "normal", true);
+        }
+        &-normal {
+            @include typographyImp("h2", "medium", true);
+        }
+        &-semibold {
+            @include typographyImp("h2", "semibold", ture);
+        }
+        &-bold {
+            @include typographyImp("h2", "bold", true);
+        }
+    }
+    &1 {
+        &-light {
+            @include typographyImp("h1", "normal", true);
+        }
+        &-normal {
+            @include typographyImp("h1", "medium", true);
+        }
+        &-semibold {
+            @include typographyImp("h1", "semibold", ture);
+        }
+        &-bold {
+            @include typographyImp("h1", "bold", true);
+        }
+    }
+}

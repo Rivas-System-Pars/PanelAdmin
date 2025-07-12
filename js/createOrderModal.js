@@ -298,18 +298,6 @@ $("#newCustomerToggle").on("change", function () {
     }
 });
 
-// Dropdown change handlers
-Object.keys(dropdowns).forEach((key) => {
-    $(`[data-dropdown="${key}"]`).on("change", (e, value, text) => {
-        console.log(`${key} changed:`, value, text);
-
-        if (value && typeof window.showNotification === "function") {
-            window.showNotification(`${text} انتخاب شد`, "success", {
-                duration: 2000,
-            });
-        }
-    });
-});
 
 // Product search with debounce
 let searchTimeout;
@@ -344,7 +332,7 @@ $("#customerPhone").on("input", function () {
 
 // Form submission - UPDATED VERSION
 $("#createOrderBtn").on("click", function () {
-    const button = $(this);
+  const button = $(this);
     button.addClass("order-loading");
 
     // Collect form data including new customer fields
@@ -362,7 +350,8 @@ $("#createOrderBtn").on("click", function () {
         orderDate: $("#orderDate").val(),
         orderTime: $("#orderTime").val(),
         orderNote: $("#orderNote").val(),
-        newCustomer: $("#newCustomerToggle").is(""),
+        // FIXED: Use :checked to get toggle state
+        newCustomer: $("#newCustomerToggle").is(":checked"),
         // New customer fields
         customerName: $("#customerName").val(),
         customerEmail: $("#customerEmail").val(),
@@ -371,8 +360,7 @@ $("#createOrderBtn").on("click", function () {
             ? dropdowns.countryCode.getValue()
             : "+98",
     };
-
-    // Validate form
+      // Validate form
     const errors = validator.validateAll(formData);
 
     setTimeout(() => {
@@ -484,7 +472,7 @@ if (savedDraft) {
 
         // Handle new customer toggle
         if (draft.newCustomer) {
-            $("#newCustomerToggle").prop("checked", true).trigger("change");
+            $("#newCustomerToggle").prop("checked", false).trigger("change");
         }
     } catch (e) {
         console.log("Error loading draft:", e);

@@ -189,6 +189,34 @@
                     align-items: center;
                     justify-content: space-between;
                     flex-direction: row-reverse;
+                    .user-info {
+                        .user-name,
+                        .user-last-order {
+                            color: rgba($black-color, 0.6);
+                        }
+                    }
+                    .activation_status {
+                        &-active {
+                            background-color: rgba($green-color, 0.2);
+                            color: rgba($green-color, 1);
+                            border-radius: var(--radius-lg);
+                            @extend .label2-normal;
+                            padding: 0.25rem 0.75rem;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                        }
+                        &-inactive {
+                            background-color: rgba($red-color, 0.2);
+                            color: rgba($red-color, 1);
+                            border-radius: var(--radius-lg);
+                            @extend .label2-normal;
+                            padding: 0.25rem 0.75rem;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                        }
+                    }
 
                     .box_header_icon {
                         width: 36px;
@@ -246,7 +274,7 @@
                             &-percentage {
                                 color: rgba($green-color, 1);
                                 @include typography("label1", "normal");
-                                &-down{
+                                &-down {
                                     @include typography("label1", "normal");
                                     color: rgba($red-color, 1);
                                 }

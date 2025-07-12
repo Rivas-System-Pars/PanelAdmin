@@ -24,8 +24,26 @@ function init() {
     setupToggles();
     setupValidation();
     convertNumbers();
+    setDefaultCountryCode(); // Add this line
 }
-
+function setDefaultCountryCode() {
+    const $countryDropdown = $(
+        '.customer-dropdown[data-dropdown="country-code"]'
+    );
+    if ($countryDropdown.length) {
+        $countryDropdown.data("value", "+98");
+        $countryDropdown
+            .find(".customer-dropdown-value")
+            .text("ایران (+98)")
+            .addClass("selected");
+        $countryDropdown
+            .find(".customer-dropdown-option[data-value='+98']")
+            .addClass("active");
+        $countryDropdown
+            .find(".customer-dropdown-trigger")
+            .prop("disabled", true);
+    }
+}
 function setupEvents() {
     $("#customerToggle").on("click", toggleModal);
     $("#closeCustomer, #cancelCustomer").on("click", hideModal);
@@ -45,6 +63,8 @@ function setupEvents() {
 function setupDropdowns() {
     $(".customer-dropdown").each(function () {
         const $dropdown = $(this);
+        if ($dropdown.data("dropdown") === "country-code") return; // Skip country code
+
         const $trigger = $dropdown.find(".customer-dropdown-trigger");
         const $menu = $dropdown.find(".customer-dropdown-menu");
 
@@ -168,12 +188,19 @@ function closeDropdown($dropdown) {
 
 function selectOption($dropdown, $option) {
     const value = $option.data("value");
-    const text = $option.find(".text").text() || $option.text();
+    const text = $option.text();
+    const $valueSpan = $dropdown.find(".customer-dropdown-value");
 
-    $dropdown.find(".customer-dropdown-trigger .value").text(text);
+    // Update display
+    $valueSpan.text(text).addClass("selected");
+
+    // Update dropdown state
     $dropdown.find(".customer-dropdown-option").removeClass("active");
     $option.addClass("active");
     $dropdown.data("value", value);
+
+    // Remove error state if present
+    $dropdown.find(".customer-dropdown-trigger").removeClass("invalid");
 
     closeDropdown($dropdown);
 }
@@ -213,24 +240,148 @@ function validateInput($input) {
 
 function submitForm() {
     const $btn = $("#submitCustomer");
-    let isValid = true;
+    let hasErrors = false;
+    const errors = [];
 
-    $(".customer-input[required]").each(function () {
-        if (!validateInput($(this))) isValid = false;
-    });
+    // Clear previous error states
+    $(".customer-input").removeClass("invalid");
+    $(".customer-dropdown-trigger").removeClass("invalid");
 
-    if (!isValid) {
-        $(".customer-content").css("animation", "shake 0.5s ease-in-out");
-        setTimeout(() => $(".customer-content").css("animation", ""), 500);
-        return;
+    // Validate customer name
+    const $customerName = $('[data-input="customer-name"]');
+    const customerNameValue = $customerName.val().trim();
+    if (!customerNameValue) {
+        errors.push("لطفاً نام مشتری را وارد کنید");
+        $customerName.addClass("invalid");
+        hasErrors = true;
+    } else if (customerNameValue.length < 2) {
+        errors.push("نام مشتری باید حداقل ۲ کاراکتر باشد");
+        $customerName.addClass("invalid");
+        hasErrors = true;
+    } else if (!/^[\u0600-\u06FF\s]+$/.test(customerNameValue)) {
+        errors.push("لطفاً نام را به فارسی وارد کنید");
+        $customerName.addClass("invalid");
+        hasErrors = true;
     }
 
+    // Validate phone number
+    const $phoneNumber = $('[data-input="phone-number"]');
+    const phoneValue = $phoneNumber.val().trim();
+    if (!phoneValue) {
+        errors.push("لطفاً شماره موبایل را وارد کنید");
+        $phoneNumber.addClass("invalid");
+        hasErrors = true;
+    } else if (!/^9\d{9}$/.test(phoneValue)) {
+        errors.push("شماره موبایل باید با ۹ شروع شده و ۱۰ رقم باشد");
+        $phoneNumber.addClass("invalid");
+        hasErrors = true;
+    }
+
+    // Validate email (if provided)
+    const $customerEmail = $('[data-input="customer-email"]');
+    const emailValue = $customerEmail.val().trim();
+    if (emailValue && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue)) {
+        errors.push("لطفاً ایمیل معتبر وارد کنید");
+        $customerEmail.addClass("invalid");
+        hasErrors = true;
+    }
+
+    // Validate country code dropdown
+    const $countryDropdown = $(
+        '.customer-dropdown[data-dropdown="country-code"]'
+    );
+    // const countryValue = $countryDropdown.data("value");
+    // if (!countryValue) {
+    //     errors.push("لطفاً کد کشور را انتخاب کنید");
+    //     $countryDropdown.find(".customer-dropdown-trigger").addClass("invalid");
+    //     hasErrors = true;
+    // }
+
+    // Validate address fields if address toggle is checked
+    if ($("#addAddressToggle").is(":checked")) {
+        const $streetAddress = $('[data-input="street-address"]');
+        const streetValue = $streetAddress.val().trim();
+        if (!streetValue) {
+            errors.push("لطفاً آدرس خیابان را وارد کنید");
+            $streetAddress.addClass("invalid");
+            hasErrors = true;
+        } else if (streetValue.length < 5) {
+            errors.push("آدرس خیابان باید حداقل ۵ کاراکتر باشد");
+            $streetAddress.addClass("invalid");
+            hasErrors = true;
+        }
+
+        const $city = $('[data-input="city"]');
+        const cityValue = $city.val().trim();
+        if (!cityValue) {
+            errors.push("لطفاً نام شهر را وارد کنید");
+            $city.addClass("invalid");
+            hasErrors = true;
+        }
+
+        const $stateDropdown = $('.customer-dropdown[data-dropdown="state"]');
+        const stateValue = $stateDropdown.data("value");
+        if (!stateValue) {
+            errors.push("لطفاً استان را انتخاب کنید");
+            $stateDropdown
+                .find(".customer-dropdown-trigger")
+                .addClass("invalid");
+            hasErrors = true;
+        }
+    }
+
+    // If there are errors, show notifications and prevent submission
+    if (hasErrors) {
+        // Show shake animation
+
+        // Show error notifications
+        errors.forEach((error, index) => {
+            setTimeout(() => {
+                if (typeof window.showNotification === "function") {
+                    window.showNotification(error, "error");
+                } else {
+                    console.error("Validation Error:", error);
+                    alert(error); // Fallback
+                }
+            }, index * 300);
+        });
+
+        // Show summary notification
+        setTimeout(() => {
+            const summaryMessage = `لطفاً ${errors.length} خطای فرم را برطرف کنید`;
+            if (typeof window.showNotification === "function") {
+                window.showNotification(summaryMessage, "error");
+            } else {
+                console.error("Validation Error:", summaryMessage);
+                alert(summaryMessage); // Fallback
+            }
+        }, errors.length * 300);
+
+        return; // Stop form submission
+    }
+
+    // If validation passes, show success and proceed
+    if (typeof window.showNotification === "function") {
+        window.showNotification("اطلاعات فرم معتبر است، در حال ثبت...", "info");
+    } else {
+        console.log("اطلاعات فرم معتبر است، در حال ثبت...");
+    }
+
+    // Proceed with form submission
     $btn.prop("disabled", true).html(
         '<i class="fas fa-spinner fa-spin"></i><span>در حال افزودن...</span>'
     );
 
     setTimeout(() => {
         console.log("Form submitted:", getFormData());
+
+        // Show success notification
+        if (typeof window.showNotification === "function") {
+            window.showNotification("مشتری با موفقیت اضافه شد!", "success");
+        } else {
+            console.log("مشتری با موفقیت اضافه شد!");
+        }
+
         $btn.html('<i class="fas fa-check"></i><span>افزوده شد!</span>');
 
         setTimeout(() => {
@@ -248,10 +399,7 @@ function getFormData() {
         customerName: $('[data-input="customer-name"]').val(),
         customerEmail: $('[data-input="customer-email"]').val(),
         phoneNumber: toEnglish($('[data-input="phone-number"]').val()),
-        countryCode:
-            $('.customer-dropdown[data-dropdown="country-code"]').data(
-                "value"
-            ) || "+98",
+        countryCode: "+98",
         addAddress: $("#addAddressToggle").is(":checked"),
         streetAddress: $('[data-input="street-address"]').val(),
         city: $('[data-input="city"]').val(),
@@ -264,6 +412,8 @@ function resetForm() {
     $("#customerForm")[0].reset();
     $(".customer-input").removeClass("valid invalid");
     $(".customer-dropdown").removeData("value");
+    $(".customer-dropdown-trigger").removeClass("invalid");
     $("#addAddressToggle").prop("checked", false).trigger("change");
     $("#billingSameToggle").prop("checked", true);
+    setDefaultCountryCode()
 }
